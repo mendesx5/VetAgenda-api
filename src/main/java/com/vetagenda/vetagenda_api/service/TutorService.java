@@ -28,11 +28,11 @@ public class TutorService {
         TutorEntity tutorSalvo = tutorRepository.save(tutor);
 
         TutorResponse response = new TutorResponse();
-        response.setId((tutor.getId()));
-        response.setName(tutorRequest.getName());
-        response.setCpf(tutorRequest.getCpf());
-        response.setTelefone(tutorRequest.getTelefone());
-        response.setEmail(tutorRequest.getEmail());
+        response.setId((tutorSalvo.getId()));
+        response.setName(tutorSalvo.getName());
+        response.setCpf(tutorSalvo.getCpf());
+        response.setTelefone(tutorSalvo.getTelefone());
+        response.setEmail(tutorSalvo.getEmail());
 
         return response;
     }
@@ -70,5 +70,9 @@ public class TutorService {
                 .collect(Collectors.toList());
 
     }
+
+    // Atualizar tutor:
+
+    // Remover tutor:
 
 }
