@@ -1,7 +1,6 @@
 package com.vetagenda.vetagenda_api.service;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AnimalRequest;
-import com.vetagenda.vetagenda_api.domain.dto.request.TutorRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AnimalResponse;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
 import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
@@ -9,6 +8,9 @@ import com.vetagenda.vetagenda_api.repository.AnimalRepository;
 import com.vetagenda.vetagenda_api.repository.TutorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -18,12 +20,12 @@ public class AnimalService {
     private final AnimalRepository animalRepository;
     private final TutorRepository tutorRepository;
 
-    // Cadastrar animal (com tutor_id no body)
+    // Cadastrar animal
     public AnimalResponse cadastrarAnimal (AnimalRequest animalRequest, Long tutorId) {
         //Buscar e validar o tutor por ID
         TutorEntity tutor = tutorRepository.findById(tutorId)
                 .orElseThrow(() -> new RuntimeException("Tutor não encontrado com ID: " + tutorId));
-        //
+
         AnimalEntity animal = new AnimalEntity();
         animal.setName(animalRequest.getName());
         animal.setEspecie(animalRequest.getEspecie());
@@ -45,15 +47,39 @@ public class AnimalService {
         return response;
     }
 
-
-    // Listar todos os animais
-
-    // Buscar animal por id
-
-    // Histórico de concultas do animal
-
     // Atualizar animal
-
     // Remover animal (sem remover o tutor a qual ele está ligado)
 
+    // Listar todos os animais
+    public List<AnimalResponse> listarTodosAnimais() {
+        return animalRepository.findAll().stream()
+                .map(animalEntity -> {
+                    AnimalResponse response = new AnimalResponse();
+                    response.setId(animalEntity.getId());
+                    response.setName(animalEntity.getName());
+                    response.setEspecie(animalEntity.getEspecie());
+                    response.setRaca(animalEntity.getRaca());
+                    response.setDataNascimento(animalEntity.getDataNascimento());
+                    response.setPeso(animalEntity.getPeso());
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
+    // Buscar animal por id
+    public AnimalResponse buscarAnimalPorId(Long id) {
+        // Caso o id não corresponda a um animal cadastrado
+        AnimalEntity animal = animalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Animal não encontrado!"));
+
+        AnimalResponse response = new AnimalResponse();
+        response.setId(animal.getId());
+        response.setName(animal.getName());
+        response.setEspecie(animal.getEspecie());
+        response.setRaca(animal.getRaca());
+        response.setDataNascimento(animal.getDataNascimento());
+        response.setPeso(animal.getPeso());
+        return response;
+    }
+
+    // Histórico de concultas do animal
 }

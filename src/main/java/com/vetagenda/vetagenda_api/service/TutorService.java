@@ -55,8 +55,7 @@ public class TutorService {
     }
 
     // Listar todos os Tutores e suas informações
-    public List<TutorResponse> listarTodos () {
-
+    public List<TutorResponse> listarTodosTutores () {
         return tutorRepository.findAll().stream()
                 .map(tutorEntity -> {
                     TutorResponse response = new TutorResponse();
@@ -72,7 +71,10 @@ public class TutorService {
     }
 
     // Atualizar tutor:
-
     // Remover tutor:
+
+
+    // Listar Animais associados ao tutor por ID:
+
 
 }

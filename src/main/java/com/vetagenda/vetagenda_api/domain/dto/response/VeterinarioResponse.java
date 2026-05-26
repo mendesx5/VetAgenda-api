@@ -17,5 +17,5 @@ public class VeterinarioResponse {
 
     private String crmv;
 
-    private Especialidade especialidade;
+    // private Especialidade especialidade;
 }
