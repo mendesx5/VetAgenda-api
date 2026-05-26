@@ -45,7 +45,7 @@ Desenvolvido como projeto de portfólio pessoal, com foco em boas práticas de b
 - [x] Enums (`StatusAgendamento`, `Especialidade`)
 - [x] DTOs de Request e Response
 - [x] Repositórios com queries customizadas
-- [ ] Services com validação de conflito de horário
+- [ ] Services com validação de conflito de horário (EM DESENVOLVIMENTO)
 - [ ] Controllers REST
 - [ ] Tratamento global de exceções
 - [ ] Documentação Swagger

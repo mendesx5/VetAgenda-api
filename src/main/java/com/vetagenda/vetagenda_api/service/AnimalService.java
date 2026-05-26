@@ -81,5 +81,5 @@ public class AnimalService {
         return response;
     }
 
-    // Histórico de concultas do animal
+    // Histórico de consultas do animal
 }
