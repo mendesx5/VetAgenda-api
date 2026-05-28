@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +25,10 @@ public class AnimalService {
 
     // Cadastrar animal
     @Transactional
-    public AnimalResponse cadastrarAnimal (AnimalRequest animalRequest, Long tutorId) {
+    public AnimalResponse cadastrarAnimal (AnimalRequest animalRequest) {
         //Buscar e validar o tutor por ID
-        TutorEntity tutor = tutorRepository.findById(tutorId)
-                .orElseThrow(() -> new RuntimeException("Tutor não encontrado com ID: " + tutorId));
+        TutorEntity tutor = tutorRepository.findById(animalRequest.getTutorId())
+                .orElseThrow(() -> new RuntimeException("Tutor não encontrado com ID: " + animalRequest.getTutorId() ));
 
         AnimalEntity animal = new AnimalEntity();
         animal.setName(animalRequest.getName());
@@ -68,7 +70,7 @@ public class AnimalService {
 
     // Remover animal
     @Transactional
-    public void removerAnimal (Long id) {
+    public void deletarAnimal (Long id) {
         AnimalEntity animal = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Animal não encontrado!"));
 
