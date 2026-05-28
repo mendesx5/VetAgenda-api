@@ -19,7 +19,7 @@ public class VeterinarioService {
 
     // Cadastrar veterinários:
     @Transactional
-    public VeterinarioResponse criarVeterinario(VeterinarioRequest veterinarioRequest) {
+    public VeterinarioResponse cadastrarVeterinario(VeterinarioRequest veterinarioRequest) {
         VeterinarioEntity veterinario = new VeterinarioEntity();
         veterinario.setName(veterinarioRequest.getName());
         veterinario.setCrmv(veterinarioRequest.getCrmv());
