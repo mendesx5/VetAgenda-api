@@ -1,5 +1,6 @@
 package com.vetagenda.vetagenda_api.domain.dto.response;
 
+import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -27,4 +28,6 @@ public class AnimalResponse {
 
     private String nomeTutor;
 
+    public AnimalResponse(AnimalEntity animalSalvo) {
+    }
 }

@@ -6,6 +6,7 @@ import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
 import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
 import com.vetagenda.vetagenda_api.repository.AnimalRepository;
 import com.vetagenda.vetagenda_api.repository.TutorRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,22 @@ public class AnimalService {
     }
 
     // Atualizar animal
+    @Transactional
+    public AnimalResponse atualizarAnimal (AnimalRequest animalRequest, Long id) {
+        AnimalEntity animal = animalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
+
+        animal.setName(animalRequest.getName());
+        animal.setEspecie(animalRequest.getEspecie());
+        animal.setRaca(animalRequest.getRaca());
+        animal.setDataNascimento(animalRequest.getDataNascimento());
+        animal.setPeso(animalRequest.getPeso());
+
+        AnimalEntity animalSalvo = animalRepository.save(animal);
+
+        return new AnimalResponse(animalSalvo);
+    }
+
     // Remover animal (sem remover o tutor a qual ele está ligado)
 
     // Listar todos os animais
