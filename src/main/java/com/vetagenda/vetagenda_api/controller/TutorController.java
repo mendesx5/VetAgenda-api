@@ -32,4 +32,9 @@ public class TutorController {
                                                          @RequestBody @Valid TutorRequest tutorRequest) {
         return ResponseEntity.ok(tutorService.atualizarTutor(id, tutorRequest));
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarTutor (@PathVariable Long id) {
+        tutorService.deletarTutor(id);
+        return ResponseEntity.noContent().build();
+    }
 }
