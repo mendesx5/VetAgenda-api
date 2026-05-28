@@ -22,6 +22,7 @@ public class AnimalService {
     private final TutorRepository tutorRepository;
 
     // Cadastrar animal
+    @Transactional
     public AnimalResponse cadastrarAnimal (AnimalRequest animalRequest, Long tutorId) {
         //Buscar e validar o tutor por ID
         TutorEntity tutor = tutorRepository.findById(tutorId)
@@ -65,7 +66,29 @@ public class AnimalService {
         return new AnimalResponse(animalSalvo);
     }
 
-    // Remover animal (sem remover o tutor a qual ele está ligado)
+    // Remover animal
+    @Transactional
+    public void removerAnimal (Long id) {
+        AnimalEntity animal = animalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Animal não encontrado!"));
+
+        animalRepository.delete(animal);
+    }
+
+    // Buscar animal por id
+    public AnimalResponse buscarAnimalPorId(Long id) {
+        AnimalEntity animal = animalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Animal não encontrado!"));
+
+        AnimalResponse response = new AnimalResponse();
+        response.setId(animal.getId());
+        response.setName(animal.getName());
+        response.setEspecie(animal.getEspecie());
+        response.setRaca(animal.getRaca());
+        response.setDataNascimento(animal.getDataNascimento());
+        response.setPeso(animal.getPeso());
+        return response;
+    }
 
     // Listar todos os animais
     public List<AnimalResponse> listarTodosAnimais() {
@@ -81,21 +104,6 @@ public class AnimalService {
                     return response;
                 })
                 .collect(Collectors.toList());
-    }
-    // Buscar animal por id
-    public AnimalResponse buscarAnimalPorId(Long id) {
-        // Caso o id não corresponda a um animal cadastrado
-        AnimalEntity animal = animalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Animal não encontrado!"));
-
-        AnimalResponse response = new AnimalResponse();
-        response.setId(animal.getId());
-        response.setName(animal.getName());
-        response.setEspecie(animal.getEspecie());
-        response.setRaca(animal.getRaca());
-        response.setDataNascimento(animal.getDataNascimento());
-        response.setPeso(animal.getPeso());
-        return response;
     }
 
     // Histórico de consultas do animal

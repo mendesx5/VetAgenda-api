@@ -18,6 +18,7 @@ public class TutorService {
     private final TutorRepository tutorRepository;
 
     // Cadastrar novos tutores de animais
+    @Transactional
     public TutorResponse cadastrarTutor (TutorRequest tutorRequest) {
 
         TutorEntity tutor = new TutorEntity();
@@ -54,6 +55,15 @@ public class TutorService {
         return new TutorResponse(tutorSalvo);
     }
 
+    // Remover tutor:
+    @Transactional
+    public void deletarTutor(Long id) {
+        TutorEntity tutor = tutorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tutor não encontrado"));
+
+        tutorRepository.delete(tutor);
+    }
+
     // Buscar tutores por ID
     public TutorResponse buscarPorId (Long id) {
         TutorEntity tutor = tutorRepository.findById(id)
@@ -84,9 +94,6 @@ public class TutorService {
                 .collect(Collectors.toList());
 
     }
-
-    // Remover tutor:
-
 
     // Listar Animais associados ao tutor por ID:
 

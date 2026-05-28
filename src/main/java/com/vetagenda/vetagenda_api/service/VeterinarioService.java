@@ -20,6 +20,7 @@ public class VeterinarioService {
     private final VeterinarioRepository veterinarioRepository;
 
     // Cadastrar veterinários:
+    @Transactional
     public VeterinarioResponse criarVeterinario(VeterinarioRequest veterinarioRequest) {
         VeterinarioEntity veterinario = new VeterinarioEntity();
         veterinario.setName(veterinarioRequest.getName());
@@ -50,6 +51,13 @@ public class VeterinarioService {
     }
 
     // Remover:
+    @Transactional
+    public void deletarVeterinario(Long id) {
+        VeterinarioEntity veterinario = veterinarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Veterinário não encontrado"));
+
+        veterinarioRepository.delete(veterinario);
+    }
 
     // Buscar por ID:
     public VeterinarioResponse buscarVeterinarioPorId(Long id) {
