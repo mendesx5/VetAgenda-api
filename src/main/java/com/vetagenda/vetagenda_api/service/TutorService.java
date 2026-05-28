@@ -4,6 +4,7 @@ import com.vetagenda.vetagenda_api.domain.dto.request.TutorRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;
 import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
 import com.vetagenda.vetagenda_api.repository.TutorRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +38,24 @@ public class TutorService {
         return response;
     }
 
+    // Atualizar tutor:
+    @Transactional
+    public TutorResponse atualizarTutor (Long id, TutorRequest tutorRequest) {
+        TutorEntity tutor = tutorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tutor não encontrado"));
+
+        tutor.setName(tutorRequest.getName());
+        tutor.setCpf(tutorRequest.getCpf());
+        tutor.setTelefone(tutorRequest.getTelefone());
+        tutor.setEmail(tutorRequest.getEmail());
+
+        TutorEntity tutorSalvo = tutorRepository.save(tutor);
+
+        return new TutorResponse(tutorSalvo);
+    }
+
     // Buscar tutores por ID
     public TutorResponse buscarPorId (Long id) {
-
-        // Caso o id não corresponda a um cutor cadastrado
         TutorEntity tutor = tutorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tutor não encontrado"));
 
@@ -70,7 +85,6 @@ public class TutorService {
 
     }
 
-    // Atualizar tutor:
     // Remover tutor:
 
 
