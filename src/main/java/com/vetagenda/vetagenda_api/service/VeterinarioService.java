@@ -4,6 +4,7 @@ import com.vetagenda.vetagenda_api.domain.dto.request.VeterinarioRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.VeterinarioResponse;
 import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
 import com.vetagenda.vetagenda_api.repository.VeterinarioRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,19 @@ public class VeterinarioService {
     }
 
     // Atualizar:
+    @Transactional
+    public VeterinarioResponse atualizarVeterinario(Long id, VeterinarioRequest veterinarioRequest) {
+        VeterinarioEntity veterinario = veterinarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Veterinário não encontrado"));
+
+        veterinario.setName(veterinarioRequest.getName());
+        veterinario.setCrmv(veterinarioRequest.getCrmv());
+
+        VeterinarioEntity veterinarioSalvo = veterinarioRepository.save(veterinario);
+
+        return new VeterinarioResponse(veterinarioSalvo);
+    }
+
     // Remover:
 
     // Buscar por ID:
@@ -42,7 +56,7 @@ public class VeterinarioService {
 
         // Caso o id não corresponda a um veterinário cadastrado
         VeterinarioEntity veterinario = veterinarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Veterinário não encontrado!"));
+                .orElseThrow(() -> new RuntimeException("Veterinário não encontrado"));
 
         VeterinarioResponse response = new VeterinarioResponse();
         response.setId(veterinario.getId());
