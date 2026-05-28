@@ -1,21 +1,35 @@
 package com.vetagenda.vetagenda_api.controller;
 
-
-import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
-import com.vetagenda.vetagenda_api.repository.TutorRepository;
+import com.vetagenda.vetagenda_api.domain.dto.request.TutorRequest;
+import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;import com.vetagenda.vetagenda_api.service.TutorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/tutores")
+@RequiredArgsConstructor
 public class TutorController {
 
-    private final TutorRepository tutorRepository;
-        // AINDA SERÁ FEITO
+    private final TutorService tutorService;
 
+    @PostMapping
+    public ResponseEntity<TutorResponse> cadastrarTutor (@RequestBody @Valid TutorRequest tutorRequest) {
+        TutorResponse tutorResponse = tutorService.cadastrarTutor(tutorRequest);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(tutorResponse.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(tutorResponse);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TutorResponse> atualizarTutor (@PathVariable Long id,
+                                                         @RequestBody @Valid TutorRequest tutorRequest) {
+        return ResponseEntity.ok(tutorService.atualizarTutor(id, tutorRequest));
+    }
 }
