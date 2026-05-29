@@ -41,6 +41,12 @@ public class AnimalController {
         return ResponseEntity.noContent().build();
     }
 
+    // Buscar por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<AnimalResponse> buscarAnimalPorId (@PathVariable Long id) {
+        return ResponseEntity.ok(animalService.buscarAnimalPorId(id));
+    }
+
     // Listar todos os animais
     @GetMapping
     public ResponseEntity<List<AnimalResponse>> listarAnimais() {
