@@ -47,6 +47,7 @@ public class AnimalService {
         response.setRaca(animalSalvo.getRaca());
         response.setDataNascimento(animalSalvo.getDataNascimento());
         response.setPeso(animalSalvo.getPeso());
+        response.setNomeTutor(animalSalvo.getTutor().getName());
 
         return response;
     }
@@ -89,6 +90,8 @@ public class AnimalService {
         response.setRaca(animal.getRaca());
         response.setDataNascimento(animal.getDataNascimento());
         response.setPeso(animal.getPeso());
+        response.setNomeTutor(animal.getTutor().getName());
+
         return response;
     }
 
@@ -103,6 +106,7 @@ public class AnimalService {
                     response.setRaca(animalEntity.getRaca());
                     response.setDataNascimento(animalEntity.getDataNascimento());
                     response.setPeso(animalEntity.getPeso());
+                    response.setNomeTutor(animalEntity.getTutor().getName());
                     return response;
                 })
                 .collect(Collectors.toList());

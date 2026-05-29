@@ -84,6 +84,6 @@ public class VeterinarioService {
                 .collect(Collectors.toList());
     }
 
-    // Listar agendamentos por veterinário
+    // Listar agendamentos do veterinário
 
 }

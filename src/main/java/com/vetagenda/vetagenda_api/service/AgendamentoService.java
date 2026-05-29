@@ -17,6 +17,6 @@ public class AgendamentoService {
     // Criar:
     // Remover agendamento:
     // Listar todos:
-    // Buscar por ID:
+    // Mudar status
 
 }
