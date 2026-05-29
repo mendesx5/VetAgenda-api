@@ -80,7 +80,7 @@ public class TutorService {
     }
 
     // Listar todos os Tutores e suas informações
-    public List<TutorResponse> listarTodosTutores () {
+    public List<TutorResponse> listarTodosTutores() {
         return tutorRepository.findAll().stream()
                 .map(tutorEntity -> {
                     TutorResponse response = new TutorResponse();

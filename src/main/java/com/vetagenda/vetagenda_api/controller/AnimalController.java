@@ -1,9 +1,7 @@
 package com.vetagenda.vetagenda_api.controller;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AnimalRequest;
-import com.vetagenda.vetagenda_api.domain.dto.request.TutorRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AnimalResponse;
-import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;
 import com.vetagenda.vetagenda_api.service.AnimalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

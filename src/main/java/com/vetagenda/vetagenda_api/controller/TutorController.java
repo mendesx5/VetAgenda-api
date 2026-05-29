@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/tutores")
@@ -32,9 +33,19 @@ public class TutorController {
                                                          @RequestBody @Valid TutorRequest tutorRequest) {
         return ResponseEntity.ok(tutorService.atualizarTutor(id, tutorRequest));
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarTutor (@PathVariable Long id) {
         tutorService.deletarTutor(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Listar todos os tutores:
+
+    @GetMapping
+    public ResponseEntity<List<TutorResponse>> listarTutores () {
+        List<TutorResponse> lista = tutorService.listarTodosTutores();
+
+        return ResponseEntity.ok(lista);
     }
 }
