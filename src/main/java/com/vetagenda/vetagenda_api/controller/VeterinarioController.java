@@ -41,6 +41,12 @@ public class VeterinarioController {
         return ResponseEntity.noContent().build();
     }
 
+    // Buscar por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<VeterinarioResponse> buscarVeterinarioPorId (@PathVariable Long id) {
+        return ResponseEntity.ok(veterinarioService.buscarVeterinarioPorId(id));
+    }
+
     // Listar todos os veterinários
     @GetMapping
     public ResponseEntity<List<VeterinarioResponse>> listarVeterinarios() {
