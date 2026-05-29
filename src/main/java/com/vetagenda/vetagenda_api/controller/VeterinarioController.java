@@ -41,6 +41,7 @@ public class VeterinarioController {
         return ResponseEntity.noContent().build();
     }
 
+    // Listar todos os veterinários
     @GetMapping
     public ResponseEntity<List<VeterinarioResponse>> listarVeterinarios() {
         List<VeterinarioResponse> lista = veterinarioService.listarTodosVeterinarios();

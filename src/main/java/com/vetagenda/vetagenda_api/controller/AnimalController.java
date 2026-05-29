@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("/animal")
+@RequestMapping("/animais")
 @RequiredArgsConstructor
 public class AnimalController {
 
@@ -33,10 +34,19 @@ public class AnimalController {
                                                          @RequestBody @Valid AnimalRequest animalRequest) {
         return ResponseEntity.ok(animalService.atualizarAnimal(animalRequest, id));
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarAnimal (@PathVariable Long id) {
         animalService.deletarAnimal(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Listar todos os animais
+    @GetMapping
+    public ResponseEntity<List<AnimalResponse>> listarAnimais() {
+        List<AnimalResponse> lista = animalService.listarTodosAnimais();
+
+        return ResponseEntity.ok(lista);
     }
 
 }
