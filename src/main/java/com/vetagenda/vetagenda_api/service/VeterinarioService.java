@@ -23,6 +23,7 @@ public class VeterinarioService {
         VeterinarioEntity veterinario = new VeterinarioEntity();
         veterinario.setName(veterinarioRequest.getName());
         veterinario.setCrmv(veterinarioRequest.getCrmv());
+        veterinario.setEspecialidade(veterinarioRequest.getEspecialidade());
 
         VeterinarioEntity veterinarioSalvo = veterinarioRepository.save(veterinario);
 
@@ -30,6 +31,7 @@ public class VeterinarioService {
         response.setId((veterinarioSalvo.getId()));
         response.setName(veterinarioSalvo.getName());
         response.setCrmv(veterinarioSalvo.getCrmv());
+        response.setEspecialidade(veterinarioSalvo.getEspecialidade());
 
         return response;
     }
@@ -42,6 +44,7 @@ public class VeterinarioService {
 
         veterinario.setName(veterinarioRequest.getName());
         veterinario.setCrmv(veterinarioRequest.getCrmv());
+        veterinario.setEspecialidade(veterinarioRequest.getEspecialidade());
 
         VeterinarioEntity veterinarioSalvo = veterinarioRepository.save(veterinario);
 
@@ -68,6 +71,7 @@ public class VeterinarioService {
         response.setId(veterinario.getId());
         response.setName(veterinario.getName());
         response.setCrmv(veterinario.getCrmv());
+        response.setEspecialidade(veterinario.getEspecialidade());
         return response;
     }
 
@@ -79,6 +83,7 @@ public class VeterinarioService {
                     response.setId((veterinarioEntity.getId()));
                     response.setName(veterinarioEntity.getName());
                     response.setCrmv(veterinarioEntity.getCrmv());
+                    response.setEspecialidade(veterinarioEntity.getEspecialidade());
                     return response;
                 })
                 .collect(Collectors.toList());

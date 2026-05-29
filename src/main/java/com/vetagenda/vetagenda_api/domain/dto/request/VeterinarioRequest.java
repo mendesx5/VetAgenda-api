@@ -19,6 +19,6 @@ public class VeterinarioRequest {
     @NotBlank
     private String crmv;
 
-    // private Especialidade especialidade;
+    private Especialidade especialidade;
 
 }

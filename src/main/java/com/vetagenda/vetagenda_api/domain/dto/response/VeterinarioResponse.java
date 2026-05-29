@@ -18,8 +18,8 @@ public class VeterinarioResponse {
 
     private String crmv;
 
+    private Especialidade especialidade;
+
     public VeterinarioResponse(VeterinarioEntity veterinarioSalvo) {
     }
-
-    // private Especialidade especialidade;
 }
