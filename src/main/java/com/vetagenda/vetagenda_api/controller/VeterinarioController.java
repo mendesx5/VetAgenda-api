@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/veterinario")
@@ -38,5 +39,12 @@ public class VeterinarioController {
     public ResponseEntity<Void> deletarVeterinario (@PathVariable Long id) {
         veterinarioService.deletarVeterinario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<VeterinarioResponse>> listarVeterinarios() {
+        List<VeterinarioResponse> lista = veterinarioService.listarTodosVeterinarios();
+
+        return ResponseEntity.ok(lista);
     }
 }

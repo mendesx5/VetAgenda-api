@@ -72,7 +72,7 @@ public class VeterinarioService {
     }
 
     // Listar todos:
-    public List<VeterinarioResponse> ListarTodosVeterinarios() {
+    public List<VeterinarioResponse> listarTodosVeterinarios() {
         return veterinarioRepository.findAll().stream()
                 .map(veterinarioEntity -> {
                     VeterinarioResponse response = new VeterinarioResponse();

@@ -41,7 +41,6 @@ public class TutorController {
     }
 
     // Listar todos os tutores:
-
     @GetMapping
     public ResponseEntity<List<TutorResponse>> listarTutores () {
         List<TutorResponse> lista = tutorService.listarTodosTutores();
