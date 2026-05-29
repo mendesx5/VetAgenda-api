@@ -65,7 +65,7 @@ public class TutorService {
     }
 
     // Buscar tutores por ID
-    public TutorResponse buscarPorId (Long id) {
+    public TutorResponse buscarTutorPorId (Long id) {
         TutorEntity tutor = tutorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tutor não encontrado"));
 

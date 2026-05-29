@@ -40,6 +40,12 @@ public class TutorController {
         return ResponseEntity.noContent().build();
     }
 
+    // Buscar por ID:
+    @GetMapping("/{id}")
+    public ResponseEntity<TutorResponse> buscarTutorporId (@PathVariable Long id) {
+        return ResponseEntity.ok(tutorService.buscarTutorPorId(id));
+    }
+
     // Listar todos os tutores:
     @GetMapping
     public ResponseEntity<List<TutorResponse>> listarTutores () {

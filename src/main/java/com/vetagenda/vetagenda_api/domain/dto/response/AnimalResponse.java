@@ -1,5 +1,6 @@
 package com.vetagenda.vetagenda_api.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ public class AnimalResponse {
 
     private String raca;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataNascimento;
 
     private Double peso;
