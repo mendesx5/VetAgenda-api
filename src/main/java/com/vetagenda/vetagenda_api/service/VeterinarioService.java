@@ -3,6 +3,7 @@ package com.vetagenda.vetagenda_api.service;
 import com.vetagenda.vetagenda_api.domain.dto.request.VeterinarioRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.VeterinarioResponse;
 import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
+import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
 import com.vetagenda.vetagenda_api.repository.VeterinarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class VeterinarioService {
     @Transactional
     public VeterinarioResponse atualizarVeterinario(Long id, VeterinarioRequest veterinarioRequest) {
         VeterinarioEntity veterinario = veterinarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Veterinário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Veterinário não encontrado"));
 
         veterinario.setName(veterinarioRequest.getName());
         veterinario.setCrmv(veterinarioRequest.getCrmv());
@@ -55,7 +56,7 @@ public class VeterinarioService {
     @Transactional
     public void deletarVeterinario(Long id) {
         VeterinarioEntity veterinario = veterinarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Veterinário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Veterinário não encontrado"));
 
         veterinarioRepository.delete(veterinario);
     }
@@ -65,7 +66,7 @@ public class VeterinarioService {
 
         // Caso o id não corresponda a um veterinário cadastrado
         VeterinarioEntity veterinario = veterinarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Veterinário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Veterinário não encontrado"));
 
         VeterinarioResponse response = new VeterinarioResponse();
         response.setId(veterinario.getId());

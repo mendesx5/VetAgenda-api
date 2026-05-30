@@ -1,5 +1,6 @@
 package com.vetagenda.vetagenda_api.domain.dto.response;
 
+import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.domain.enums.StatusAgendamento;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,6 +25,9 @@ public class AgendamentoResponse {
     private StatusAgendamento status;
 
     private LocalDateTime dataHora;
+
+    public AgendamentoResponse(AgendamentoEntity agendamentoSalvo) {
+    }
 
     // private String observacoes;
 }

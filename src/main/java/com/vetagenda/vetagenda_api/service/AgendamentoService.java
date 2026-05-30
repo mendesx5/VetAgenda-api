@@ -90,6 +90,8 @@ public class AgendamentoService {
 
     }
 
-    // Mudar status
+    // Mudar status para AGENDADO, CONFIRMADO E CANCELADO:
+
+    
 
 }

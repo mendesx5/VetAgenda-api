@@ -3,6 +3,7 @@ package com.vetagenda.vetagenda_api.service;
 import com.vetagenda.vetagenda_api.domain.dto.request.TutorRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;
 import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
+import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
 import com.vetagenda.vetagenda_api.repository.TutorRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class TutorService {
     @Transactional
     public TutorResponse atualizarTutor (Long id, TutorRequest tutorRequest) {
         TutorEntity tutor = tutorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tutor não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Tutor não encontrado"));
 
         tutor.setName(tutorRequest.getName());
         tutor.setCpf(tutorRequest.getCpf());
@@ -59,7 +60,7 @@ public class TutorService {
     @Transactional
     public void deletarTutor(Long id) {
         TutorEntity tutor = tutorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tutor não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Tutor não encontrado"));
 
         tutorRepository.delete(tutor);
     }
@@ -67,7 +68,7 @@ public class TutorService {
     // Buscar tutores por ID
     public TutorResponse buscarTutorPorId (Long id) {
         TutorEntity tutor = tutorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tutor não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Tutor não encontrado"));
 
         TutorResponse response = new TutorResponse();
         response.setId((tutor.getId()));

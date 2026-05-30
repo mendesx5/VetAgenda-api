@@ -4,6 +4,7 @@ import com.vetagenda.vetagenda_api.domain.dto.request.AnimalRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AnimalResponse;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
 import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
+import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
 import com.vetagenda.vetagenda_api.repository.AnimalRepository;
 import com.vetagenda.vetagenda_api.repository.TutorRepository;
 import jakarta.transaction.Transactional;
@@ -56,7 +57,7 @@ public class AnimalService {
     @Transactional
     public AnimalResponse atualizarAnimal (AnimalRequest animalRequest, Long id) {
         AnimalEntity animal = animalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Animal não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Animal não encontrado"));
 
         animal.setName(animalRequest.getName());
         animal.setEspecie(animalRequest.getEspecie());
@@ -73,7 +74,7 @@ public class AnimalService {
     @Transactional
     public void deletarAnimal (Long id) {
         AnimalEntity animal = animalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Animal não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Animal não encontrado!"));
 
         animalRepository.delete(animal);
     }
@@ -81,7 +82,7 @@ public class AnimalService {
     // Buscar animal por id
     public AnimalResponse buscarAnimalPorId(Long id) {
         AnimalEntity animal = animalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Animal não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Animal não encontrado!"));
 
         AnimalResponse response = new AnimalResponse();
         response.setId(animal.getId());
