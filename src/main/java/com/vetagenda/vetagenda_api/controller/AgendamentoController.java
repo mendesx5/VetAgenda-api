@@ -1,11 +1,8 @@
 package com.vetagenda.vetagenda_api.controller;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AgendamentoRequest;
-import com.vetagenda.vetagenda_api.domain.dto.request.TutorRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
-import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;
 import com.vetagenda.vetagenda_api.service.AgendamentoService;
-import com.vetagenda.vetagenda_api.service.TutorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AgendamentoService {
 
-    private AgendamentoRepository agendamentoRepository;
-    private VeterinarioRepository veterinarioRepository;
-    private AnimalRepository animalRepository;
+    private final AgendamentoRepository agendamentoRepository;
+    private final VeterinarioRepository veterinarioRepository;
+    private final AnimalRepository animalRepository;
 
     // EM DESENVOLVIMENTO!!!
 

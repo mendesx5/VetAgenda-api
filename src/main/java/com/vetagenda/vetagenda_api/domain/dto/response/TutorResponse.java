@@ -22,7 +22,5 @@ public class TutorResponse {
 
     private String email;
 
-    public TutorResponse(TutorEntity tutorSalvo) {
-
-    }
+    public TutorResponse(TutorEntity tutorSalvo) {}
 }
