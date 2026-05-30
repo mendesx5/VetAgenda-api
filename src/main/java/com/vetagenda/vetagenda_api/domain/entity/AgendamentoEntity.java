@@ -29,7 +29,7 @@ public class AgendamentoEntity {
     // Preenchido só quando CANCELADO
     private String motivoCancelamento;
 
-    private String observacoes;
+    // private String observacoes;
 
     @ManyToOne
     private AnimalEntity animal;

@@ -21,8 +21,10 @@ public class AgendamentoResponse {
 
     private String nomeVeterinario;
 
+    private StatusAgendamento status;
+
     private LocalDateTime dataHora;
 
-    private StatusAgendamento status;
+    // private String observacoes;
 
 }

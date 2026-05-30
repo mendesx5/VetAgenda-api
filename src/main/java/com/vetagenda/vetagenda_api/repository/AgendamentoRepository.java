@@ -14,5 +14,5 @@ public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, 
 
     List<AgendamentoEntity> findByDataHoraBetween(LocalDateTime dataHoraAfter, LocalDateTime dataHoraBefore);
 
-    List<AgendamentoEntity> existsByVeterinarioIdAndDataHoraAfter(Long veterinarioId, LocalDateTime dataHoraAfter);
+    Boolean existsByVeterinarioIdAndDataHora(Long veterinarioId, LocalDateTime dataHoraAfter);
 }
