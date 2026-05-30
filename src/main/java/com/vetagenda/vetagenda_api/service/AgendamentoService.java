@@ -2,10 +2,8 @@ package com.vetagenda.vetagenda_api.service;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AgendamentoRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
-import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;
 import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
-import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
 import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
 import com.vetagenda.vetagenda_api.exception.ConflictException;
 import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
@@ -16,7 +14,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

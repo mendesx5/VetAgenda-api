@@ -1,9 +1,36 @@
 package com.vetagenda.vetagenda_api.controller;
 
+import com.vetagenda.vetagenda_api.domain.dto.request.AgendamentoRequest;
+import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
+import com.vetagenda.vetagenda_api.service.AgendamentoService;
+import com.vetagenda.vetagenda_api.service.TutorService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
+@RequestMapping("/agendamentos")
+@RequiredArgsConstructor
 public class AgendamentoController {
+
+    public final AgendamentoService agendamentoService;
+
+    @PostMapping
+    public ResponseEntity<AgendamentoResponse> criarAgendamento (@RequestBody @Valid AgendamentoRequest agendamentoRequest) {
+        AgendamentoResponse agendamentoResponse = agendamentoService.criarAgendamento(agendamentoRequest);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(agendamentoResponse.getId())
+                .toUri();
+        return ResponseEntity.ok(agendamentoResponse);
+    }
 
 
 
