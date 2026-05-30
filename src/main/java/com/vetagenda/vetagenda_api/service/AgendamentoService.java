@@ -4,6 +4,7 @@ import com.vetagenda.vetagenda_api.domain.dto.request.AgendamentoRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
 import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
+import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
 import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
 import com.vetagenda.vetagenda_api.exception.ConflictException;
 import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
@@ -64,6 +65,14 @@ public class AgendamentoService {
     }
 
     // Remover agendamento:
+    @Transactional
+    public void deletarAgendamento(Long id) {
+        AgendamentoEntity agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+
+        agendamentoRepository.delete(agendamento);
+    }
+
     // Listar todos:
     // Mudar status
 
