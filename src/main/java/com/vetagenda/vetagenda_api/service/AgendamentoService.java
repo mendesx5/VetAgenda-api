@@ -2,6 +2,7 @@ package com.vetagenda.vetagenda_api.service;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AgendamentoRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
+import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;
 import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
 import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,6 +77,22 @@ public class AgendamentoService {
     }
 
     // Listar todos:
+    public List<AgendamentoResponse> listarTodosAgendamentos() {
+        return agendamentoRepository.findAll().stream()
+                .map(AgendamentoEntity -> {
+                    AgendamentoResponse response = new AgendamentoResponse();
+                    response.setId((AgendamentoEntity.getId()));
+                    response.setNomeAnimal(AgendamentoEntity.getAnimal().getName());
+                    response.setNomeVeterinario(AgendamentoEntity.getVeterinario().getName());
+                    response.setStatus(AgendamentoEntity.getStatus());
+                    response.setDataHora(AgendamentoEntity.getDataHora());
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+
+    }
+
     // Mudar status
 
 }
