@@ -29,7 +29,7 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentoResponse);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarAgendamento (@PathVariable Long id) {
         agendamentoService.deletarAgendamento(id);
         return ResponseEntity.noContent().build();
