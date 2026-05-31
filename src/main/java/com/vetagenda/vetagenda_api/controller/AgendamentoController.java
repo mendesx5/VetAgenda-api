@@ -40,4 +40,10 @@ public class AgendamentoController {
         List<AgendamentoResponse> lista = agendamentoService.listarTodosAgendamentos();
         return ResponseEntity.ok(lista);
     }
+
+    @PatchMapping("/{id}/agendar")
+    public ResponseEntity<AgendamentoResponse> atualizarAgendamentoAgendado (@PathVariable Long id) {
+        return ResponseEntity.ok(agendamentoService.atualizarAgendamentoAgendado(id));
+    }
+
 }
