@@ -35,22 +35,28 @@ public class AgendamentoController {
         return ResponseEntity.noContent().build();
     }
 
+    // Listar todos os agendamentos
     @GetMapping
     public ResponseEntity<List<AgendamentoResponse>> listarTodosAgendamentos() {
         List<AgendamentoResponse> lista = agendamentoService.listarTodosAgendamentos();
         return ResponseEntity.ok(lista);
     }
 
+    // Buscar por ID:
+    @GetMapping("{id}")
+    public ResponseEntity<AgendamentoResponse> getAgendamento(@PathVariable Long id) {
+        return ResponseEntity.ok(agendamentoService.buscarAgendamentoPorId(id));
+    }
+
+    // Mudar status dos agendamentos:
     @PatchMapping("/{id}/agendar")
     public ResponseEntity<AgendamentoResponse> atualizarAgendamentoAgendado (@PathVariable Long id) {
         return ResponseEntity.ok(agendamentoService.atualizarAgendamentoAgendado(id));
     }
-
     @PatchMapping("/{id}/concluir")
     public ResponseEntity<AgendamentoResponse> atualizarAgendamentoConcluido (@PathVariable Long id) {
         return ResponseEntity.ok(agendamentoService.atualizarAgendamentoConcluido(id));
     }
-
     @PatchMapping("/{id}/cancelar")
     public ResponseEntity<AgendamentoResponse> atualizarAgendamentoCancelado (@PathVariable Long id) {
         return ResponseEntity.ok(agendamentoService.atualizarAgendamentoCancelado(id));

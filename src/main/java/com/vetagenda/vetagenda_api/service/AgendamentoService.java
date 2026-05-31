@@ -2,8 +2,10 @@ package com.vetagenda.vetagenda_api.service;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AgendamentoRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
+import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;
 import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
+import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
 import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
 import com.vetagenda.vetagenda_api.domain.enums.StatusAgendamento;
 import com.vetagenda.vetagenda_api.exception.ConflictException;
@@ -74,7 +76,7 @@ public class AgendamentoService {
         agendamentoRepository.delete(agendamento);
     }
 
-    // Listar todos:
+    // Listar todos os agendamentos:
     public List<AgendamentoResponse> listarTodosAgendamentos() {
         return agendamentoRepository.findAll().stream()
                 .map(AgendamentoEntity -> {
@@ -89,6 +91,23 @@ public class AgendamentoService {
                 })
                 .collect(Collectors.toList());
 
+    }
+
+    // Buscar agendamentos por ID:
+    public AgendamentoResponse buscarAgendamentoPorId (Long id) {
+        AgendamentoEntity agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado"));
+
+        AgendamentoResponse response = new AgendamentoResponse();
+        response.setId((agendamento.getId()));
+        response.setId(agendamento.getId());
+        response.setNomeAnimal(agendamento.getAnimal().getName());
+        response.setNomeVeterinario(agendamento.getVeterinario().getName());
+        response.setStatus(agendamento.getStatus());
+        response.setDataHora(agendamento.getDataHora());
+
+
+        return response;
     }
 
     // Mudar status para AGENDADO, CONCLUIDO E CANCELADO:
