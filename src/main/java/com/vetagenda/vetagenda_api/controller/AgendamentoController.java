@@ -51,4 +51,8 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentoService.atualizarAgendamentoConcluido(id));
     }
 
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<AgendamentoResponse> atualizarAgendamentoCancelado (@PathVariable Long id) {
+        return ResponseEntity.ok(agendamentoService.atualizarAgendamentoCancelado(id));
+    }
 }
