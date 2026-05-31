@@ -3,6 +3,7 @@ package com.vetagenda.vetagenda_api.controller;
 import com.vetagenda.vetagenda_api.domain.dto.request.VeterinarioRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.VeterinarioResponse;
 import com.vetagenda.vetagenda_api.service.VeterinarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class VeterinarioController {
     private final VeterinarioService veterinarioService;
 
     @PostMapping
+    @Operation(summary = "Cria um novo veterinário")
     public ResponseEntity<VeterinarioResponse> cadastrarVeterinario (@RequestBody @Valid VeterinarioRequest veterinarioRequest) {
         VeterinarioResponse veterinarioResponse = veterinarioService.cadastrarVeterinario(veterinarioRequest);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -30,12 +32,14 @@ public class VeterinarioController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualiza os dados de um veterinário existente")
     public ResponseEntity<VeterinarioResponse> atualizarVeterinario (@PathVariable Long id,
                                                          @RequestBody @Valid VeterinarioRequest veterinarioRequest) {
         return ResponseEntity.ok(veterinarioService.atualizarVeterinario(id, veterinarioRequest));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deleta um veterinário existente")
     public ResponseEntity<Void> deletarVeterinario (@PathVariable Long id) {
         veterinarioService.deletarVeterinario(id);
         return ResponseEntity.noContent().build();
@@ -43,12 +47,14 @@ public class VeterinarioController {
 
     // Buscar por ID
     @GetMapping("/{id}")
+    @Operation(summary = "Busca no banco um veterinário pelo id")
     public ResponseEntity<VeterinarioResponse> buscarVeterinarioPorId (@PathVariable Long id) {
         return ResponseEntity.ok(veterinarioService.buscarVeterinarioPorId(id));
     }
 
     // Listar todos os veterinários
     @GetMapping
+    @Operation(summary = "Lista todos os veterinários existentes")
     public ResponseEntity<List<VeterinarioResponse>> listarVeterinarios() {
         List<VeterinarioResponse> lista = veterinarioService.listarTodosVeterinarios();
 
