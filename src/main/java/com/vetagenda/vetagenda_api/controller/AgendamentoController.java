@@ -46,4 +46,9 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentoService.atualizarAgendamentoAgendado(id));
     }
 
+    @PatchMapping("/{id}/concluir")
+    public ResponseEntity<AgendamentoResponse> atualizarAgendamentoConcluido (@PathVariable Long id) {
+        return ResponseEntity.ok(agendamentoService.atualizarAgendamentoConcluido(id));
+    }
+
 }
