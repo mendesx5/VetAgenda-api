@@ -47,7 +47,7 @@ Desenvolvido como projeto de portfólio pessoal, com foco em boas práticas de b
 - [x] Repositórios com queries customizadas
 - [x] Services (Agendamento pendente)
 - [x] Controllers REST (Agendamento pendente)
-- [ ] Tratamento global de exceções
+- [x] Tratamento global de exceções
 - [ ] Documentação Swagger
 - [ ] Testes unitários
 - [ ] Docker Compose
