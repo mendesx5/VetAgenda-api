@@ -5,6 +5,7 @@ import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
 import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
 import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
+import com.vetagenda.vetagenda_api.domain.enums.StatusAgendamento;
 import com.vetagenda.vetagenda_api.exception.ConflictException;
 import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
 import com.vetagenda.vetagenda_api.repository.AgendamentoRepository;
@@ -90,8 +91,61 @@ public class AgendamentoService {
 
     }
 
-    // Mudar status para AGENDADO, CONFIRMADO E CANCELADO:
+    // Mudar status para AGENDADO, CONCLUIDO E CANCELADO:
+    // AGENDADO:
+    @Transactional
+    public AgendamentoResponse atualizarAgendamentoAgendado(Long id) {
+        AgendamentoEntity agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
 
-    
+        agendamento.setStatus(StatusAgendamento.AGENDADO);
+        AgendamentoEntity agendamentoAtualizado = agendamentoRepository.save(agendamento);
 
+        AgendamentoResponse agendamentoResponse = new AgendamentoResponse();
+        agendamentoResponse.setId(agendamentoAtualizado.getId());
+        agendamentoResponse.setNomeAnimal(agendamentoAtualizado.getAnimal().getName());
+        agendamentoResponse.setNomeVeterinario(agendamentoAtualizado.getVeterinario().getName());
+        agendamentoResponse.setStatus(agendamentoAtualizado.getStatus());
+        agendamentoResponse.setDataHora(agendamentoAtualizado.getDataHora());
+
+        return agendamentoResponse;
+    }
+
+    // CONCLUIDO:
+    @Transactional
+    public AgendamentoResponse atualizarAgendamentoConcluido(Long id) {
+        AgendamentoEntity agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+
+        agendamento.setStatus(StatusAgendamento.CONCLUIDO);
+        AgendamentoEntity agendamentoAtualizado = agendamentoRepository.save(agendamento);
+
+        AgendamentoResponse agendamentoResponse = new AgendamentoResponse();
+        agendamentoResponse.setId(agendamentoAtualizado.getId());
+        agendamentoResponse.setNomeAnimal(agendamentoAtualizado.getAnimal().getName());
+        agendamentoResponse.setNomeVeterinario(agendamentoAtualizado.getVeterinario().getName());
+        agendamentoResponse.setStatus(agendamentoAtualizado.getStatus());
+        agendamentoResponse.setDataHora(agendamentoAtualizado.getDataHora());
+
+        return agendamentoResponse;
+    }
+
+    // CANCELADO:
+    @Transactional
+    public AgendamentoResponse atualizarAgendamentoCancelado(Long id) {
+        AgendamentoEntity agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+
+        agendamento.setStatus(StatusAgendamento.CANCELADO);
+        AgendamentoEntity agendamentoAtualizado = agendamentoRepository.save(agendamento);
+
+        AgendamentoResponse agendamentoResponse = new AgendamentoResponse();
+        agendamentoResponse.setId(agendamentoAtualizado.getId());
+        agendamentoResponse.setNomeAnimal(agendamentoAtualizado.getAnimal().getName());
+        agendamentoResponse.setNomeVeterinario(agendamentoAtualizado.getVeterinario().getName());
+        agendamentoResponse.setStatus(agendamentoAtualizado.getStatus());
+        agendamentoResponse.setDataHora(agendamentoAtualizado.getDataHora());
+
+        return agendamentoResponse;
+    }
 }
