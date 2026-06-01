@@ -2,8 +2,10 @@ package com.vetagenda.vetagenda_api.controller;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AgendamentoRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
+import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.service.AgendamentoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,13 +41,13 @@ public class AgendamentoController {
         return ResponseEntity.noContent().build();
     }
 
-    // Listar todos os agendamentos
-    //@GetMapping
-    //@Operation(summary = "Lista todos os agendamentos existentes")
-    //public ResponseEntity<List<AgendamentoResponse>> listarTodosAgendamentos() {
-    //    List<AgendamentoResponse> lista = agendamentoService.listarTodosAgendamentos();
-    //    return ResponseEntity.ok(lista);
-    //}
+    // Listar todos os agendamentos com filtro opcional para datas
+    @GetMapping
+    @Operation(summary = "Listar os agendamentos existentes com filtro opcional de data")
+    public ResponseEntity<List<AgendamentoResponse>> listarTodosAgendamentos(@RequestParam (required = false) String data) {
+        List<AgendamentoResponse> response = agendamentoService.listarTodosAgendamentos(data);
+        return ResponseEntity.ok(response);
+    }
 
     // Buscar por ID:
     @GetMapping("{id}")
