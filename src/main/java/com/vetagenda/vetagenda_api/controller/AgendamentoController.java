@@ -43,7 +43,8 @@ public class AgendamentoController {
 
     // Listar todos os agendamentos com filtro opcional para datas
     @GetMapping
-    @Operation(summary = "Listar os agendamentos existentes com filtro opcional de data")
+    @Operation(summary = "Listar os agendamentos existentes com filtro opcional de data",
+            description = "Para que o filtro seja aplicado, o formato de endpoint deve ser : /agendamentos?data=dd/MM/yyyy")
     public ResponseEntity<List<AgendamentoResponse>> listarTodosAgendamentos(@RequestParam (required = false) String data) {
         List<AgendamentoResponse> response = agendamentoService.listarTodosAgendamentos(data);
         return ResponseEntity.ok(response);
