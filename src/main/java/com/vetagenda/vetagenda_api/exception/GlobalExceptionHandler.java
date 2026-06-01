@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.zip.DataFormatException;
 
 import static org.springframework.http.ResponseEntity.status;
 
@@ -52,5 +53,16 @@ public class GlobalExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    // Erro de falha de digitação na data do filtro de listagem dos agendamentos
+    @ExceptionHandler(DataFormatException.class)
+    public ResponseEntity<StandartError> dataFormatException (DataFormatException e) {
+        StandartError error = new StandartError();
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setErro("A data deve ser enviada no formato dd/MM/yyyy.");
+        error.setTimestamp(LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -161,15 +162,15 @@ public class AgendamentoService {
             agendamentos = agendamentoRepository.findAll();
         } else {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDateTime dataLocal = LocalDateTime.parse(dataStr, formatter);
+            LocalDate dataLocal = LocalDate.parse(dataStr, formatter);
 
-            LocalDateTime inicio = dataLocal.toLocalDate().atStartOfDay();
-            LocalDateTime fim = dataLocal.toLocalDate().atTime(LocalTime.MAX);
+            LocalDateTime inicio = dataLocal.atStartOfDay();
+            LocalDateTime fim = dataLocal.atTime(LocalTime.MAX);
 
             agendamentos = agendamentoRepository.findByDataHoraBetween(inicio, fim);
         }
 
-        return agendamentoRepository.findAll().stream()
+        return agendamentos.stream()
                 .map(AgendamentoEntity -> {
                     AgendamentoResponse response = new AgendamentoResponse();
                     response.setId((AgendamentoEntity.getId()));
