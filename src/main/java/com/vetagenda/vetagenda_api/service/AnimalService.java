@@ -1,10 +1,13 @@
 package com.vetagenda.vetagenda_api.service;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AnimalRequest;
+import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
 import com.vetagenda.vetagenda_api.domain.dto.response.AnimalResponse;
+import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
 import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
 import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
+import com.vetagenda.vetagenda_api.repository.AgendamentoRepository;
 import com.vetagenda.vetagenda_api.repository.AnimalRepository;
 import com.vetagenda.vetagenda_api.repository.TutorRepository;
 import jakarta.transaction.Transactional;
@@ -23,6 +26,7 @@ public class AnimalService {
 
     private final AnimalRepository animalRepository;
     private final TutorRepository tutorRepository;
+    private final AgendamentoRepository agendamentoRepository;
 
     // Cadastrar animal
     @Transactional
@@ -114,4 +118,22 @@ public class AnimalService {
     }
 
     // Histórico de consultas do animal
+    public List<AgendamentoResponse> historicoConsultasAnimal(Long id) {
+        animalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Animal não encontrado!"));
+
+        List<AgendamentoEntity> agendamentos = agendamentoRepository.findByAnimalId(id);
+
+        return agendamentos.stream()
+                .map(agendamentoEntity -> {
+                    AgendamentoResponse response = new AgendamentoResponse();
+                    response.setId(agendamentoEntity.getId());
+                    response.setNomeAnimal(agendamentoEntity.getAnimal().getName());
+                    response.setNomeVeterinario(agendamentoEntity.getVeterinario().getName());
+                    response.setStatus(agendamentoEntity.getStatus());
+                    response.setDataHora(agendamentoEntity.getDataHora());
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
 }
