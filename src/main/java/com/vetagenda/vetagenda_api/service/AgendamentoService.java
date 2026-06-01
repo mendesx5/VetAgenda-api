@@ -76,40 +76,6 @@ public class AgendamentoService {
         agendamentoRepository.delete(agendamento);
     }
 
-    // Listar todos os agendamentos:
-    public List<AgendamentoResponse> listarTodosAgendamentos() {
-        return agendamentoRepository.findAll().stream()
-                .map(AgendamentoEntity -> {
-                    AgendamentoResponse response = new AgendamentoResponse();
-                    response.setId((AgendamentoEntity.getId()));
-                    response.setNomeAnimal(AgendamentoEntity.getAnimal().getName());
-                    response.setNomeVeterinario(AgendamentoEntity.getVeterinario().getName());
-                    response.setStatus(AgendamentoEntity.getStatus());
-                    response.setDataHora(AgendamentoEntity.getDataHora());
-
-                    return response;
-                })
-                .collect(Collectors.toList());
-
-    }
-
-    // Buscar agendamentos por ID:
-    public AgendamentoResponse buscarAgendamentoPorId (Long id) {
-        AgendamentoEntity agendamento = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado"));
-
-        AgendamentoResponse response = new AgendamentoResponse();
-        response.setId((agendamento.getId()));
-        response.setId(agendamento.getId());
-        response.setNomeAnimal(agendamento.getAnimal().getName());
-        response.setNomeVeterinario(agendamento.getVeterinario().getName());
-        response.setStatus(agendamento.getStatus());
-        response.setDataHora(agendamento.getDataHora());
-
-
-        return response;
-    }
-
     // Mudar status para AGENDADO, CONCLUIDO E CANCELADO:
     // AGENDADO:
     @Transactional
@@ -167,4 +133,39 @@ public class AgendamentoService {
 
         return agendamentoResponse;
     }
+
+    // Buscar agendamentos por ID:
+    public AgendamentoResponse buscarAgendamentoPorId (Long id) {
+        AgendamentoEntity agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado"));
+
+        AgendamentoResponse response = new AgendamentoResponse();
+        response.setId((agendamento.getId()));
+        response.setId(agendamento.getId());
+        response.setNomeAnimal(agendamento.getAnimal().getName());
+        response.setNomeVeterinario(agendamento.getVeterinario().getName());
+        response.setStatus(agendamento.getStatus());
+        response.setDataHora(agendamento.getDataHora());
+
+        return response;
+    }
+
+    // Listar todos os agendamentos:
+    public List<AgendamentoResponse> listarTodosAgendamentos() {
+        return agendamentoRepository.findAll().stream()
+                .map(AgendamentoEntity -> {
+                    AgendamentoResponse response = new AgendamentoResponse();
+                    response.setId((AgendamentoEntity.getId()));
+                    response.setNomeAnimal(AgendamentoEntity.getAnimal().getName());
+                    response.setNomeVeterinario(AgendamentoEntity.getVeterinario().getName());
+                    response.setStatus(AgendamentoEntity.getStatus());
+                    response.setDataHora(AgendamentoEntity.getDataHora());
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+
+    }
+
+
 }

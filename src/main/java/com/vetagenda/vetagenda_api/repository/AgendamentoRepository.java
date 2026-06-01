@@ -12,7 +12,7 @@ public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, 
     List<AgendamentoEntity> findByVeterinarioId(Long veterinarioId);
     List<AgendamentoEntity> findByAnimalId(Long animalId);
 
-    List<AgendamentoEntity> findByDataHoraBetween(LocalDateTime dataHoraAfter, LocalDateTime dataHoraBefore);
+    List<AgendamentoEntity> findByDataHoraBetween(LocalDateTime inicio, LocalDateTime fim);
 
     Boolean existsByVeterinarioIdAndDataHora(Long veterinarioId, LocalDateTime dataHoraAfter);
 }
