@@ -1,6 +1,7 @@
 package com.vetagenda.vetagenda_api.controller;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.VeterinarioRequest;
+import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
 import com.vetagenda.vetagenda_api.domain.dto.response.VeterinarioResponse;
 import com.vetagenda.vetagenda_api.service.VeterinarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,6 +58,15 @@ public class VeterinarioController {
     @Operation(summary = "Lista todos os veterinários existentes")
     public ResponseEntity<List<VeterinarioResponse>> listarVeterinarios() {
         List<VeterinarioResponse> lista = veterinarioService.listarTodosVeterinarios();
+
+        return ResponseEntity.ok(lista);
+    }
+
+    // Listar agendamentos do veterinário pelo id
+    @GetMapping("/{id}/agenda")
+    @Operation(summary = "Lista todos os veterinários existentes")
+    public ResponseEntity<List<AgendamentoResponse>> agendamentosPorVeterinario(@PathVariable Long id) {
+        List<AgendamentoResponse> lista = veterinarioService.agendamentosPorVeterinario(id);
 
         return ResponseEntity.ok(lista);
     }

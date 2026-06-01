@@ -1,6 +1,7 @@
 package com.vetagenda.vetagenda_api.controller;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.AnimalRequest;
+import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
 import com.vetagenda.vetagenda_api.domain.dto.response.AnimalResponse;
 import com.vetagenda.vetagenda_api.service.AnimalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,8 +65,8 @@ public class AnimalController {
     // Histórico do animal
     @GetMapping("/{id}/historico")
     @Operation(summary = "Lista o histórico dos animais existentes pelo id")
-    public ResponseEntity<List<AnimalResponse>> historicoConsultasAnimal() {
-        List<AnimalResponse> lista = animalService.listarTodosAnimais();
+    public ResponseEntity<List<AgendamentoResponse>> historicoConsultasAnimal(@PathVariable Long id) {
+        List<AgendamentoResponse> lista = animalService.historicoConsultasAnimal(id);
 
         return ResponseEntity.ok(lista);
     }
