@@ -61,4 +61,13 @@ public class AnimalController {
         return ResponseEntity.ok(lista);
     }
 
+    // Histórico do animal
+    @GetMapping("/{id}/historico")
+    @Operation(summary = "Lista o histórico dos animais existentes pelo id")
+    public ResponseEntity<List<AnimalResponse>> historicoConsultasAnimal() {
+        List<AnimalResponse> lista = animalService.listarTodosAnimais();
+
+        return ResponseEntity.ok(lista);
+    }
+
 }
