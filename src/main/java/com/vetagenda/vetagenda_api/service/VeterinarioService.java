@@ -1,14 +1,18 @@
 package com.vetagenda.vetagenda_api.service;
 
 import com.vetagenda.vetagenda_api.domain.dto.request.VeterinarioRequest;
+import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
 import com.vetagenda.vetagenda_api.domain.dto.response.VeterinarioResponse;
+import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
 import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
 import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
+import com.vetagenda.vetagenda_api.repository.AgendamentoRepository;
 import com.vetagenda.vetagenda_api.repository.VeterinarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +21,7 @@ import java.util.stream.Collectors;
 public class VeterinarioService {
 
     private final VeterinarioRepository veterinarioRepository;
+    private final AgendamentoRepository agendamentoRepository;
 
     // Cadastrar veterinários:
     @Transactional
@@ -91,5 +96,22 @@ public class VeterinarioService {
     }
 
     // Listar agendamentos do veterinário
+    public List<AgendamentoResponse> agendamentosPorVeterinario(Long id) {
+        veterinarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Veterinário não encontrado"));
 
+        List<AgendamentoEntity> agendamentos = agendamentoRepository.findByVeterinarioId(id);
+
+        return agendamentos.stream()
+                .map(agendamentoEntity ->  {
+                    AgendamentoResponse response = new AgendamentoResponse();
+                    response.setId(agendamentoEntity.getId());
+                    response.setNomeAnimal(agendamentoEntity.getAnimal().getName());
+                    response.setNomeVeterinario(agendamentoEntity.getVeterinario().getName());
+                    response.setStatus(agendamentoEntity.getStatus());
+                    response.setDataHora(agendamentoEntity.getDataHora());
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
 }
