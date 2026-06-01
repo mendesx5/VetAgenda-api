@@ -17,6 +17,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -151,7 +154,21 @@ public class AgendamentoService {
     }
 
     // Listar todos os agendamentos:
-    public List<AgendamentoResponse> listarTodosAgendamentos() {
+    public List<AgendamentoResponse> listarTodosAgendamentos(String dataStr) {
+        List<AgendamentoEntity> agendamentos;
+
+        if (dataStr == null || dataStr.isBlank()) {
+            agendamentos = agendamentoRepository.findAll();
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDateTime dataLocal = LocalDateTime.parse(dataStr, formatter);
+
+            LocalDateTime inicio = dataLocal.toLocalDate().atStartOfDay();
+            LocalDateTime fim = dataLocal.toLocalDate().atTime(LocalTime.MAX);
+
+            agendamentos = agendamentoRepository.findByDataHoraBetween(inicio, fim);
+        }
+
         return agendamentoRepository.findAll().stream()
                 .map(AgendamentoEntity -> {
                     AgendamentoResponse response = new AgendamentoResponse();
@@ -166,6 +183,4 @@ public class AgendamentoService {
                 .collect(Collectors.toList());
 
     }
-
-
 }

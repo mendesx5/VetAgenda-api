@@ -40,12 +40,7 @@ public class AgendamentoController {
     }
 
     // Listar todos os agendamentos
-    @GetMapping
-    @Operation(summary = "Lista todos os agendamentos existentes")
-    public ResponseEntity<List<AgendamentoResponse>> listarTodosAgendamentos() {
-        List<AgendamentoResponse> lista = agendamentoService.listarTodosAgendamentos();
-        return ResponseEntity.ok(lista);
-    }
+
 
     // Buscar por ID:
     @GetMapping("{id}")
