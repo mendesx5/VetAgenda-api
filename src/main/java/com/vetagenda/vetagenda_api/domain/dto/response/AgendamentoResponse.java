@@ -26,8 +26,5 @@ public class AgendamentoResponse {
 
     private LocalDateTime dataHora;
 
-    public AgendamentoResponse(AgendamentoEntity agendamentoSalvo) {
-    }
-
     // private String observacoes;
 }

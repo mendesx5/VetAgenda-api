@@ -31,7 +31,7 @@ public class AgendamentoController {
                 .path("/{id}")
                 .buildAndExpand(agendamentoResponse.getId())
                 .toUri();
-        return ResponseEntity.ok(agendamentoResponse);
+        return ResponseEntity.created(location).body(agendamentoResponse);
     }
 
     @DeleteMapping("/{id}")

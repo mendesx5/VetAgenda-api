@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TutorRepository extends JpaRepository<TutorEntity, Long> {
-    Long id(Long id);
+
 }

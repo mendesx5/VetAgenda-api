@@ -75,7 +75,7 @@ public class AgendamentoService {
     @Transactional
     public void deletarAgendamento(Long id) {
         AgendamentoEntity agendamento = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado"));
 
         agendamentoRepository.delete(agendamento);
     }

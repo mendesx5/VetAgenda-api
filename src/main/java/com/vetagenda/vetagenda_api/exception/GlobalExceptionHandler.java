@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     }
 
     // Erro de conflito de horários (409)
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(ConflictException.class)
     public ResponseEntity<StandartError> conflictException (ConflictException e) {
         StandartError error = new StandartError();
 
