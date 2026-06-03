@@ -105,13 +105,13 @@ Veterinario (1) ──────── (N) Agendamento
 
 ## 🚀 Como Rodar
 
+> **Atenção:** este projeto foi disponibilizado para rodar via **Docker**. Certifique-se de ter o Docker e o Docker Compose instalados.
+
 ### Pré-requisitos
 
 - [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/)
-- Java 21+ (para rodar sem Docker)
-- Maven 3.9+ (para rodar sem Docker)
 
-### Com Docker (recomendado)
+### Passo a passo
 
 ```bash
 # 1. Clone o repositório
@@ -120,42 +120,46 @@ cd VetAgenda-api
 
 # 2. Configure as variáveis de ambiente
 cp .env.example .env
-# Edite o .env com suas configurações
+# Edite o .env com suas configurações (veja a seção abaixo)
 
 # 3. Suba os containers
 docker compose up -d
-
-# A API estará disponível em: http://localhost:8080
-# Swagger UI: http://localhost:8080/swagger-ui.html
 ```
 
-### Sem Docker (local)
-
-```bash
-# 1. Clone o repositório
-git clone https://github.com/mendesx5/VetAgenda-api.git
-cd VetAgenda-api
-
-# 2. Configure as variáveis de ambiente
-cp .env.example .env
-# Preencha com os dados do seu PostgreSQL local
-
-# 3. Execute a aplicação
-./mvnw spring-boot:run
-```
+A API estará disponível em: `http://localhost:8080`  
+Swagger UI: `http://localhost:8080/swagger-ui.html`
 
 ---
 
 ## 🔧 Variáveis de Ambiente
 
-Copie `.env.example` para `.env` e preencha:
+Copie `.env.example` para `.env` e preencha com seus dados:
 
 ```env
-DB_HOST=localhost
+DB_HOST=       # veja nota abaixo
 DB_PORT=5432
-DB_NAME=vetagenda
+DB_NAME=vetagenda-db
 DB_USER=seu_usuario
 DB_PASSWORD=sua_senha
+```
+
+### ⚠️ Atenção ao `DB_HOST`
+
+O valor de `DB_HOST` deve ser diferente dependendo de como você está rodando a aplicação:
+
+| Ambiente                                 | Valor de `DB_HOST` |
+|------------------------------------------|--------------------|
+| **Docker** (`docker compose up`)         | `db`               |
+| **Local** (IDE / `mvnw spring-boot:run`) | `localhost`        |
+
+**Por quê?** Dentro da rede Docker, os containers se comunicam pelo nome do serviço (`db`). Fora do Docker, o banco é acessado via `localhost` na porta mapeada para o host (`5433`).
+
+```env
+# ✅ Para rodar com Docker
+DB_HOST=db
+
+# ✅ Para rodar localmente
+DB_HOST=localhost
 ```
 
 ---
