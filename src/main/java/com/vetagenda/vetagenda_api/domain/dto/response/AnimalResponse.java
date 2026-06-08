@@ -2,8 +2,6 @@ package com.vetagenda.vetagenda_api.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
