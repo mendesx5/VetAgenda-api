@@ -80,7 +80,7 @@ public class AgendamentoService {
         agendamentoRepository.delete(agendamento);
     }
 
-    // Mudar status para AGENDADO, CONCLUIDO E CANCELADO:
+    // Mudar status para AGENDADO, CONFIRMADO, CONCLUIDO E CANCELADO:
     // AGENDADO:
     @Transactional
     public AgendamentoResponse atualizarAgendamentoAgendado(Long id) {
@@ -88,6 +88,24 @@ public class AgendamentoService {
                 .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
 
         agendamento.setStatus(StatusAgendamento.AGENDADO);
+        AgendamentoEntity agendamentoAtualizado = agendamentoRepository.save(agendamento);
+
+        AgendamentoResponse agendamentoResponse = new AgendamentoResponse();
+        agendamentoResponse.setId(agendamentoAtualizado.getId());
+        agendamentoResponse.setNomeAnimal(agendamentoAtualizado.getAnimal().getName());
+        agendamentoResponse.setNomeVeterinario(agendamentoAtualizado.getVeterinario().getName());
+        agendamentoResponse.setStatus(agendamentoAtualizado.getStatus());
+        agendamentoResponse.setDataHora(agendamentoAtualizado.getDataHora());
+
+        return agendamentoResponse;
+    }
+
+    @Transactional
+    public AgendamentoResponse atualizarAgendamentoConfirmado(Long id) {
+        AgendamentoEntity agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+
+        agendamento.setStatus(StatusAgendamento.CONFIRMADO);
         AgendamentoEntity agendamentoAtualizado = agendamentoRepository.save(agendamento);
 
         AgendamentoResponse agendamentoResponse = new AgendamentoResponse();

@@ -63,6 +63,11 @@ public class AgendamentoController {
     public ResponseEntity<AgendamentoResponse> atualizarAgendamentoAgendado (@PathVariable Long id) {
         return ResponseEntity.ok(agendamentoService.atualizarAgendamentoAgendado(id));
     }
+    @PatchMapping("/{id}/confirmar")
+    @Operation(summary = "Muda o status de agendamento para CONFIRMADO")
+    public ResponseEntity<AgendamentoResponse> atualizarAgendamentoConfirmado (@PathVariable Long id) {
+        return ResponseEntity.ok(agendamentoService.atualizarAgendamentoConfirmado(id));
+    }
     @PatchMapping("/{id}/concluir")
     @Operation(summary = "Muda o status de agendamento para CONCLUIDO")
     public ResponseEntity<AgendamentoResponse> atualizarAgendamentoConcluido (@PathVariable Long id) {
