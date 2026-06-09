@@ -2,7 +2,8 @@ package com.vetagenda.vetagenda_api.domain.enums;
 
 public enum UserRole {
     ADMIN("admin"),
-    USER("user");
+    VETERINARIO("veterinario"),
+    RECEPCIONISTA("receptionista");
 
     private String role;
 
