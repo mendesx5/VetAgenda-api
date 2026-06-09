@@ -31,6 +31,8 @@ public class UsuarioEntity implements UserDetails {
     @NotBlank
     private String password;
 
+    private boolean ativo = true;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -63,7 +65,7 @@ public class UsuarioEntity implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.ativo;
     }
 
 }

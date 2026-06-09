@@ -21,11 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
-
     private final UsuarioRepository repository;
-
     private final TokenService tokenService;
-
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
