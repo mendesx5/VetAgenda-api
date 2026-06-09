@@ -1,117 +1,173 @@
 # 🐾 VetAgenda API
 
-> REST API para gerenciamento de agendamentos de clínicas veterinárias, construída com Java 21, Spring Boot 3.5 e PostgreSQL.
+> API REST para gerenciamento de clínicas veterinárias — construída com Java 21, Spring Boot 3.5, Spring Security + JWT e PostgreSQL.
 
 [![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=openjdk)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-6DB33F?style=flat-square&logo=springboot)](https://spring.io/projects/spring-boot)
+[![Spring Security](https://img.shields.io/badge/Spring_Security-JWT-6DB33F?style=flat-square&logo=springsecurity)](https://spring.io/projects/spring-security)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=flat-square&logo=postgresql)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
-[![Status](https://img.shields.io/badge/Status-Concluído_(Backend)-brightgreen?style=flat-square)]()
+[![Status](https://img.shields.io/badge/Status-v1.1-brightgreen?style=flat-square)]()
 
 ---
 
 ## 📋 Sobre o Projeto
 
-O **VetAgenda** é uma API REST para gerenciamento de agendamentos de clínicas veterinárias. O sistema permite controlar tutores (donos de pets), animais, veterinários e consultas (agendamentos) — com **validação de conflito de horário** e histórico completo por animal.
+O **VetAgenda** é uma API REST completa para gestão de clínicas veterinárias. O sistema gerencia tutores (donos de pets), animais, veterinários, agendamentos e usuários do sistema — com autenticação JWT, controle de acesso por roles e regras de negócio reais.
 
-Desenvolvido como projeto de portfólio pessoal, com foco em boas práticas de backend: arquitetura em camadas, validações de negócio reais e tratamento centralizado de erros.
+Desenvolvido como projeto de portfólio pessoal, com foco em boas práticas de backend: arquitetura em camadas, segurança stateless, validações de domínio e tratamento centralizado de erros.
 
-**Diferencial técnico:** a lógica de detecção de conflito de agendamento verifica sobreposição de horários por veterinário, retornando `HTTP 409 Conflict` com mensagem descritiva quando um horário já está ocupado.
+**Frontend:** [github.com/mendesx5/VetAgenda-Frontend](https://github.com/mendesx5/VetAgenda-Frontend)
 
 ---
 
 ## ⚙️ Stack
 
-| Camada          | Tecnologia                       |
-|-----------------|----------------------------------|
-| Linguagem       | Java 21                          |
-| Framework       | Spring Boot 3.5                  |
-| Persistência    | Spring Data JPA + Hibernate      |
-| Banco de dados  | PostgreSQL 15                    |
-| Validação       | Bean Validation (Jakarta)        |
-| Documentação    | Springdoc OpenAPI (Swagger UI)   |
-| Boilerplate     | Lombok                           |
-| Containerização | Docker + Docker Compose          |
-| Build           | Maven                            |
+| Camada | Tecnologia |
+|---|---|
+| Linguagem | Java 21 |
+| Framework | Spring Boot 3.5.14 |
+| Segurança | Spring Security + JWT (auth0 java-jwt 4.4.0) |
+| Persistência | Spring Data JPA + Hibernate |
+| Banco de dados | PostgreSQL 15 |
+| Banco para testes | H2 (in-memory, `@ActiveProfiles("test")`) |
+| Validação | Bean Validation (Jakarta) |
+| Documentação | Springdoc OpenAPI 2.8 (Swagger UI) |
+| Boilerplate | Lombok |
+| Configuração | spring-dotenv 4.0.0 |
+| Containerização | Docker + Docker Compose |
+| Build | Maven |
+
+---
+
+## 🔐 Segurança e Autenticação
+
+A API utiliza autenticação **stateless com JWT**. Todos os endpoints — exceto `/auth/login` e `/auth/register` — exigem um token Bearer válido no header `Authorization`.
+
+### Roles disponíveis
+
+| Role | Acesso |
+|---|---|
+| `ADMIN` | Acesso total — gerencia usuários, cadastros e agendamentos |
+| `VETERINARIO` | Acesso à agenda, animais, tutores e agendamentos |
+| `RECEPCIONISTA` | Acesso aos agendamentos e cadastros básicos |
+
+### Fluxo de autenticação
+
+```
+POST /auth/login  →  { token, role }  →  Authorization: Bearer <token>
+```
+
+O token expira em **2 horas** (fuso `America/Sao_Paulo`). Em caso de token inválido ou expirado, a API retorna `401 Unauthorized`.
 
 ---
 
 ## 🗃️ Modelo de Dados
 
 ```
-Tutor (1) ──────────── (N) Animal
-                              │
-                             (N)
-                              │
-Veterinario (1) ──────── (N) Agendamento
+UsuarioEntity
+├── login (unique)
+├── password (BCrypt)
+└── role (ADMIN | VETERINARIO | RECEPCIONISTA)
+
+TutorEntity (1) ──────── (N) AnimalEntity
+                                   │
+                                  (N)
+                                   │
+VeterinarioEntity (1) ──── (N) AgendamentoEntity
 ```
 
-**StatusAgendamento:** `AGENDADO` | `CONFIRMADO` | `CANCELADO` | `CONCLUIDO`
+**StatusAgendamento:** `AGENDADO` | `CONFIRMADO` | `CONCLUIDO` | `CANCELADO`
 
-**Especialidade:** `CLINICO_GERAL` | `DERMATOLOGIA` | `ORTOPEDIA` | `CARDIOLOGIA` | `OFTALMOLOGIA`
+**Especialidade:** `CLINICO_GERAL` | `DERMATOLOGIA` | `ORTOPEDIA` | `CARDIOLOGIA` | `OFTAMOLOGIA`
 
---- 
+---
 
 ## 🔌 Endpoints
 
+### Auth — `/auth`
+
+| Método | Rota | Acesso | Descrição |
+|---|---|---|---|
+| POST | `/auth/login` | Público | Autenticar → retorna `{ token, role }` |
+| POST | `/auth/register` | Público | Cadastrar novo usuário do sistema |
+
 ### Tutores — `/tutores`
 
-| Método | Rota          | Descrição                        |
-|--------|---------------|----------------------------------|
-| POST   | `/`           | Cadastrar novo tutor             |
-| GET    | `/`           | Listar todos os tutores          |
-| GET    | `/{id}`       | Buscar tutor por ID              |
-| PUT    | `/{id}`       | Atualizar dados do tutor         |
-| DELETE | `/{id}`       | Remover tutor                    |
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/tutores` | Cadastrar novo tutor |
+| GET | `/tutores` | Listar todos os tutores |
+| GET | `/tutores/{id}` | Buscar tutor por ID |
+| PUT | `/tutores/{id}` | Atualizar dados do tutor |
+| DELETE | `/tutores/{id}` | Remover tutor |
 
 ### Animais — `/animais`
 
-| Método | Rota              | Descrição                   |
-|--------|-------------------|-----------------------------|
-| POST   | `/`               | Cadastrar novo animal       |
-| GET    | `/`               | Listar todos os animais     |
-| GET    | `/{id}`           | Buscar animal por ID        |
-| PUT    | `/{id}`           | Atualizar dados do animal   |
-| DELETE | `/{id}`           | Remover animal              |
-| GET    | `/{id}/historico` | Listar histórico do animal  |
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/animais` | Cadastrar novo animal |
+| GET | `/animais` | Listar todos os animais |
+| GET | `/animais/{id}` | Buscar animal por ID |
+| PUT | `/animais/{id}` | Atualizar dados do animal |
+| DELETE | `/animais/{id}` | Remover animal |
+| GET | `/animais/{id}/historico` | Histórico de consultas do animal |
 
 ### Veterinários — `/veterinarios`
 
-| Método | Rota           | Descrição                      |
-|--------|----------------|--------------------------------|
-| POST   | `/`            | Cadastrar novo veterinário     |
-| GET    | `/`            | Listar todos os veterinários   |
-| GET    | `/{id}`        | Buscar veterinário por ID      |
-| PUT    | `/{id}`        | Atualizar dados do veterinário |
-| DELETE | `/{id}`        | Remover veterinário            |
-| GET    | `/{id}/agenda` | Listar agenda do veterinário   |
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/veterinarios` | Cadastrar novo veterinário |
+| GET | `/veterinarios` | Listar todos os veterinários |
+| GET | `/veterinarios/{id}` | Buscar veterinário por ID |
+| PUT | `/veterinarios/{id}` | Atualizar dados do veterinário |
+| DELETE | `/veterinarios/{id}` | Remover veterinário |
+| GET | `/veterinarios/{id}/agenda` | Listar agenda do veterinário |
 
 ### Agendamentos — `/agendamentos`
 
-| Método | Rota               | Descrição                                      |
-|--------|--------------------|------------------------------------------------|
-| POST   | `/`                | Criar agendamento (valida conflito de horário) |
-| GET    | `/`                | Listar todos os agendamentos                   |
-| GET    | `/{id}`            | Buscar agendamento por ID                      |
-| GET    | `?data=dd/MM/yyyy` | Filtrar agendamentos por dia                   |
-| PATCH  | `/{id}/agendar`    | Atualizar status do agendamento para AGENDADO  |
-| PATCH  | `/{id}/concluir`   | Atualizar status do agendamento para CONCLUIDO |
-| PATCH  | `/{id}/cancelar`   | Atualizar status do agendamento para CANCELAR  |
-| DELETE | `/{id}`            | Remover agendamento                            |
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/agendamentos` | Criar agendamento (valida conflito de horário) |
+| GET | `/agendamentos` | Listar todos (aceita `?data=dd/MM/yyyy`) |
+| GET | `/agendamentos/{id}` | Buscar por ID |
+| DELETE | `/agendamentos/{id}` | Remover agendamento |
+| PATCH | `/agendamentos/{id}/agendar` | Mudar status → `AGENDADO` |
+| PATCH | `/agendamentos/{id}/confirmar` | Mudar status → `CONFIRMADO` |
+| PATCH | `/agendamentos/{id}/concluir` | Mudar status → `CONCLUIDO` |
+| PATCH | `/agendamentos/{id}/cancelar` | Mudar status → `CANCELADO` |
 
-> **Regra de negócio:** ao criar ou atualizar um agendamento, o sistema verifica se o veterinário já possui uma consulta no mesmo horário. Em caso positivo, retorna `409 Conflict`.
+> **Regra de negócio:** ao criar um agendamento, o sistema verifica se o veterinário já possui uma consulta no mesmo `dataHora` exato. Em caso positivo, retorna `409 Conflict`.
+
+---
+
+## ⚠️ Tratamento de Erros
+
+Todos os erros retornam um body padronizado via `GlobalExceptionHandler`:
+
+| Código | Situação |
+|---|---|
+| `400` | Campos inválidos ou ausentes (`@Valid`) — retorna lista de campos com erro |
+| `401` | Token ausente, inválido ou expirado |
+| `404` | Recurso não encontrado |
+| `409` | Conflito de horário no agendamento |
+
+```json
+{
+  "status": 409,
+  "erro": "Conflito de horário",
+  "mensagem": "Este horário de atendimento já está preenchido!",
+  "timestamp": "2026-06-09T10:30:00"
+}
+```
 
 ---
 
 ## 🚀 Como Rodar
 
-> **Atenção:** este projeto foi disponibilizado para rodar via **Docker**. Certifique-se de ter o Docker e o Docker Compose instalados.
+### Opção 1 — Docker (recomendado)
 
-### Pré-requisitos
-
-- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/)
-
-### Passo a passo
+> Necessário: [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/)
 
 ```bash
 # 1. Clone o repositório
@@ -120,47 +176,46 @@ cd VetAgenda-api
 
 # 2. Configure as variáveis de ambiente
 cp .env.example .env
-# Edite o .env com suas configurações (veja a seção abaixo)
+# Edite o .env com suas configurações
 
-# 3. Suba os containers
+# 3. Suba os containers (API + PostgreSQL)
 docker compose up -d
 ```
 
-A API estará disponível em: `http://localhost:8080`  
-Swagger UI: `http://localhost:8080/swagger-ui.html`
+A API estará disponível em `http://localhost:8080`
+
+### Opção 2 — Local (IDE ou Maven)
+
+> Necessário: Java 21, Maven e PostgreSQL rodando localmente
+
+```bash
+git clone https://github.com/mendesx5/VetAgenda-api.git
+cd VetAgenda-api
+cp .env.example .env
+# Configure DB_HOST=localhost no .env
+./mvnw spring-boot:run
+```
 
 ---
 
 ## 🔧 Variáveis de Ambiente
 
-Copie `.env.example` para `.env` e preencha com seus dados:
+Copie `.env.example` para `.env` e preencha:
 
 ```env
-DB_HOST=       # veja nota abaixo
+# "localhost" para rodar localmente, "db" para rodar via Docker Compose
+DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=vetagenda-db
 DB_USER=seu_usuario
 DB_PASSWORD=sua_senha
+JWT_SECRET=sua-chave-secreta-aqui
 ```
 
-### ⚠️ Atenção ao `DB_HOST`
-
-O valor de `DB_HOST` deve ser diferente dependendo de como você está rodando a aplicação:
-
-| Ambiente                                 | Valor de `DB_HOST` |
-|------------------------------------------|--------------------|
-| **Docker** (`docker compose up`)         | `db`               |
-| **Local** (IDE / `mvnw spring-boot:run`) | `localhost`        |
-
-**Por quê?** Dentro da rede Docker, os containers se comunicam pelo nome do serviço (`db`). Fora do Docker, o banco é acessado via `localhost` na porta mapeada para o host (`5433`).
-
-```env
-# ✅ Para rodar com Docker
-DB_HOST=db
-
-# ✅ Para rodar localmente
-DB_HOST=localhost
-```
+| `DB_HOST` | Quando usar |
+|---|---|
+| `localhost` | Rodando pela IDE ou `mvnw spring-boot:run` |
+| `db` | Rodando via `docker compose up` |
 
 ---
 
@@ -172,7 +227,7 @@ Com a aplicação rodando, acesse o Swagger UI:
 http://localhost:8080/swagger-ui.html
 ```
 
-Todos os endpoints estão documentados com exemplos de request/response e códigos de retorno.
+Todos os endpoints estão documentados com descrições, parâmetros e exemplos de resposta.
 
 ---
 
@@ -180,41 +235,18 @@ Todos os endpoints estão documentados com exemplos de request/response e códig
 
 ```
 src/
-└── main/
-    └── java/com/vetagenda/
-        ├── controller/            # Controllers REST
-        ├── service/               # Regras de negócio
-        ├── repository/            # Repositórios JPA
-        ├── domain/
-        │   ├── dto/
-        │   │   ├── request/       # DTOs de entrada
-        │   │   ├── response/      # DTOs de saída
-        │   ├── entity/            # Entidades JPA
-        │   ├── enums/             # StatusAgendamento, Especialidade
-        └── exception/             # Tratamento global de erros
-```
-
----
-
-## ⚠️ Tratamento de Erros
-
-A API retorna respostas de erro padronizadas:
-
-| Código | Situação                                          |
-|--------|---------------------------------------------------|
-| 400    | Dados inválidos na requisição                     |
-| 404    | Recurso não encontrado                            |
-| 409    | Conflito de horário no agendamento                |
-| 500    | Erro interno do servidor                          |
-
-Exemplo de resposta de erro `409`:
-```json
-{
-  "status": 409,
-  "error": "Conflict",
-  "message": "O veterinário já possui um agendamento neste horário.",
-  "timestamp": "2025-06-01T10:30:00"
-}
+└── main/java/com/vetagenda/vetagenda_api/
+    ├── controller/          # Controllers REST (Auth, Agendamento, Animal, Tutor, Veterinario)
+    ├── service/             # Regras de negócio e lógica de domínio
+    ├── repository/          # Repositórios JPA com queries customizadas
+    ├── domain/
+    │   ├── dto/
+    │   │   ├── request/     # DTOs de entrada (com validações @NotBlank, @NotNull)
+    │   │   └── response/    # DTOs de saída
+    │   ├── entity/          # Entidades JPA (Agendamento, Animal, Tutor, Veterinario, Usuario)
+    │   └── enums/           # StatusAgendamento, Especialidade, UserRole
+    ├── exception/           # GlobalExceptionHandler + exceções customizadas
+    └── infra/security/      # SecurityConfigurations, SecurityFilter, TokenService
 ```
 
 ---
