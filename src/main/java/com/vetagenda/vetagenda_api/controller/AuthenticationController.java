@@ -49,6 +49,7 @@ public class AuthenticationController {
                 .login(data.getLogin())
                 .password(encryptedPassword)
                 .role(data.getRole())
+                .ativo(true)
                 .build();
 
         this.repository.save(novoUsuario);
