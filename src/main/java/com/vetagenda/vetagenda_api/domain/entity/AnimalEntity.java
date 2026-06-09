@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "tb-animail")
+@Table(name = "tb-animal")
 @Getter
 @Setter
 @NoArgsConstructor
