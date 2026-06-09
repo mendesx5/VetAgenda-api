@@ -31,7 +31,7 @@ public class UsuarioEntity implements UserDetails {
     @NotBlank
     private String password;
 
-    private boolean ativo = true;
+    private Boolean ativo = true;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
