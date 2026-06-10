@@ -33,5 +33,8 @@ public class VeterinarioEntity {
     @OneToMany(mappedBy = "veterinario")
     private List<AgendamentoEntity> agendamentos;
 
+    @OneToOne
+    @JoinColumn(name = "usuario_id", unique = true)
+    private UsuarioEntity usuario;
 
 }

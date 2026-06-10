@@ -3,10 +3,7 @@ package com.vetagenda.vetagenda_api.service;
 import com.vetagenda.vetagenda_api.domain.dto.request.AgendamentoRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
 import com.vetagenda.vetagenda_api.domain.dto.response.TutorResponse;
-import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
-import com.vetagenda.vetagenda_api.domain.entity.AnimalEntity;
-import com.vetagenda.vetagenda_api.domain.entity.TutorEntity;
-import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
+import com.vetagenda.vetagenda_api.domain.entity.*;
 import com.vetagenda.vetagenda_api.domain.enums.StatusAgendamento;
 import com.vetagenda.vetagenda_api.exception.ConflictException;
 import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
@@ -15,6 +12,7 @@ import com.vetagenda.vetagenda_api.repository.AnimalRepository;
 import com.vetagenda.vetagenda_api.repository.VeterinarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -174,32 +172,40 @@ public class AgendamentoService {
 
     // Listar todos os agendamentos:
     public List<AgendamentoResponse> listarTodosAgendamentos(String dataStr) {
+        UsuarioEntity usuarioLogado = (UsuarioEntity) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
         List<AgendamentoEntity> agendamentos;
 
-        if (dataStr == null || dataStr.isBlank()) {
-            agendamentos = agendamentoRepository.findAll();
+        if (usuarioLogado.getRole().name().toUpperCase().equals("VETERINARIO")) {
+            VeterinarioEntity profissional = veterinarioRepository.findByUsuario(usuarioLogado)
+                    .orElseThrow(() -> new ResourceNotFoundException("Este usuário VETERINARIO não possui um cadastro profissional vinculado na clínica."));
+            agendamentos = agendamentoRepository.findByVeterinarioId(profissional.getId());
         } else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate dataLocal = LocalDate.parse(dataStr, formatter);
+            if (dataStr == null || dataStr.isBlank()) {
+                agendamentos = agendamentoRepository.findAll();
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate dataLocal = LocalDate.parse(dataStr, formatter);
 
-            LocalDateTime inicio = dataLocal.atStartOfDay();
-            LocalDateTime fim = dataLocal.atTime(LocalTime.MAX);
+                LocalDateTime inicio = dataLocal.atStartOfDay();
+                LocalDateTime fim = dataLocal.atTime(LocalTime.MAX);
 
-            agendamentos = agendamentoRepository.findByDataHoraBetween(inicio, fim);
+                agendamentos = agendamentoRepository.findByDataHoraBetween(inicio, fim);
+            }
         }
-
         return agendamentos.stream()
-                .map(AgendamentoEntity -> {
+                .map(agendamentoEntity -> {
                     AgendamentoResponse response = new AgendamentoResponse();
-                    response.setId((AgendamentoEntity.getId()));
-                    response.setNomeAnimal(AgendamentoEntity.getAnimal().getName());
-                    response.setNomeVeterinario(AgendamentoEntity.getVeterinario().getName());
-                    response.setStatus(AgendamentoEntity.getStatus());
-                    response.setDataHora(AgendamentoEntity.getDataHora());
+                    response.setId(agendamentoEntity.getId());
+                    response.setNomeAnimal(agendamentoEntity.getAnimal().getName());
+                    response.setNomeVeterinario(agendamentoEntity.getVeterinario().getName());
+                    response.setStatus(agendamentoEntity.getStatus());
+                    response.setDataHora(agendamentoEntity.getDataHora());
 
                     return response;
                 })
                 .collect(Collectors.toList());
-
     }
 }

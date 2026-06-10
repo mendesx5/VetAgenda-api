@@ -19,4 +19,6 @@ public class VeterinarioRequest {
 
     private Especialidade especialidade;
 
+    private Long usuarioId;
+
 }

@@ -4,9 +4,11 @@ import com.vetagenda.vetagenda_api.domain.dto.request.VeterinarioRequest;
 import com.vetagenda.vetagenda_api.domain.dto.response.AgendamentoResponse;
 import com.vetagenda.vetagenda_api.domain.dto.response.VeterinarioResponse;
 import com.vetagenda.vetagenda_api.domain.entity.AgendamentoEntity;
+import com.vetagenda.vetagenda_api.domain.entity.UsuarioEntity;
 import com.vetagenda.vetagenda_api.domain.entity.VeterinarioEntity;
 import com.vetagenda.vetagenda_api.exception.ResourceNotFoundException;
 import com.vetagenda.vetagenda_api.repository.AgendamentoRepository;
+import com.vetagenda.vetagenda_api.repository.UsuarioRepository;
 import com.vetagenda.vetagenda_api.repository.VeterinarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class VeterinarioService {
 
     private final VeterinarioRepository veterinarioRepository;
     private final AgendamentoRepository agendamentoRepository;
+    private final UsuarioRepository usuarioRepository;
 
     // Cadastrar veterinários:
     @Transactional
@@ -30,6 +33,12 @@ public class VeterinarioService {
         veterinario.setName(veterinarioRequest.getName());
         veterinario.setCrmv(veterinarioRequest.getCrmv());
         veterinario.setEspecialidade(veterinarioRequest.getEspecialidade());
+
+        if (veterinarioRequest.getUsuarioId() != null) {
+            UsuarioEntity usuario = usuarioRepository.findById(veterinarioRequest.getUsuarioId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Conta de usuário informada não existe."));
+            veterinario.setUsuario(usuario);
+        }
 
         VeterinarioEntity veterinarioSalvo = veterinarioRepository.save(veterinario);
 
